@@ -57,7 +57,7 @@ void list_add_p(List *list, void *e) {
     _add(list, e);
 }
 
-#define list_add(l, type_t, e) ({type_t temp = e; _list_add(l, &temp);})
+#define list_add(l, type_t, e) do {type_t temp = e; list_add_p(l, &temp);} while (0)
 
 void list_add_all(List *list, int count, ...) {
     _ensure_capacity(list, list->length + count, DEFAULT_CAPACITY, 1.5f);
