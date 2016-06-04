@@ -2,18 +2,7 @@
 
 #define __C_LIST_UTIL
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define DEFAULT_CAPACITY 10
-
-typedef struct {
-    void *data;
-    int element_size;
-    int length;
-    int capacity;
-} List;
+#include "list.h"
 
 static void _realloc_data(List *list) {
     void *temp = realloc(list->data, list->element_size * list->capacity);
@@ -50,14 +39,10 @@ List* _list_create(int element_size) {
     return list;
 }
 
-#define list_create(type_t) (_list_create(sizeof(type_t)))
-
 void list_add_p(List *list, void *e) {
     _ensure_capacity(list, list->length + 1, DEFAULT_CAPACITY, 1.5f);
     _add(list, e);
 }
-
-#define list_add(l, type_t, e) do {type_t temp = e; list_add_p(l, &temp);} while (0)
 
 void list_add_all(List *list, int count, ...) {
     _ensure_capacity(list, list->length + count, DEFAULT_CAPACITY, 1.5f);
@@ -75,7 +60,5 @@ void list_add_all(List *list, int count, ...) {
 void* list_get_p(List *list, int i) {
     return list->data + list->element_size * i;
 }
-
-#define list_get(l, type_t, i) (*(type_t*)list_get_p(l, i))
 
 #endif
